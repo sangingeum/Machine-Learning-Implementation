@@ -5,3 +5,6 @@ misc/__pycache__/utils.cpython-39.pyc
 .idea/vcs.xml
 .idea/vcs.xml
 supervised/__pycache__/neural_network_binary_classification.cpython-39.pyc
+data_preprocessing/__pycache__/normalization.cpython-39.pyc
+data_preprocessing/__pycache__/one_hot_encoding.cpython-39.pyc
+supervised/__pycache__/neural_network_multi_class_classification.cpython-39.pyc
