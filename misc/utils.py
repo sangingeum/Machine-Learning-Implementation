@@ -19,6 +19,13 @@ def calculate_test_loss(model, device, loss_function, test_data_loader):
         average_test_loss /= len(test_data_loader.dataset)
     return average_test_loss
 
+def calculate_multi_class_accuracy(model, X, y):
+    model.eval()
+    with torch.inference_mode():
+        y_pred = torch.round(model(X))
+        acc = 100 * (1 - ((y_pred != y).sum() / len(y)))
+
+    return acc
 
 def calculate_binary_accuracy(model, X, y):
     model.eval()
@@ -69,8 +76,6 @@ def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, devi
             else:
                 accuracy = accuracy_function(model, X_test.to(device), y_test.to(device))
                 print_learning_progress(epoch, average_train_loss, average_test_loss, accuracy)
-
-
 
 def accuracy(y_pred, y_true):
     if y_pred.shape != y_true.shape:
