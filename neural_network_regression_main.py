@@ -1,5 +1,6 @@
 from supervised.neural_network_regression import *
 from sklearn.datasets import load_diabetes
+from data_preprocessing.normalization import *
 from misc.utils import *
 
 def main():
@@ -8,6 +9,9 @@ def main():
     # load data
     X, y = load_diabetes(return_X_y=True, as_frame=False)
     y = y.reshape((-1, 1))
+    # normalize data
+    scaler = StandardScaler()
+    X = scaler.fit_transform(X)
     # convert to torch.tensor
     X = torch.from_numpy(X).type(torch.float32)
     y = torch.from_numpy(y).type(torch.float32)

@@ -1,6 +1,7 @@
 from supervised.neural_network_binary_classification import *
 from sklearn.datasets import load_breast_cancer
 from sklearn.datasets import make_circles
+from data_preprocessing.normalization import *
 from misc.utils import *
 
 def main():
@@ -8,6 +9,9 @@ def main():
     device = get_device_name_agnostic()
     # load data
     X, y = load_breast_cancer(return_X_y=True, as_frame=False)
+    # normalize data
+    scaler = StandardScaler()
+    X = scaler.fit_transform(X)
     #X, y = make_circles(1000, shuffle=True, noise=0.04, random_state=42)
     y = y.reshape((-1, 1))
     # convert to torch.tensor
