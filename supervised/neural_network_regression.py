@@ -7,15 +7,15 @@ class neural_network_regression(nn.Module):
         if len(units_per_layer) < 2:
             print("Units_per_layer should be longer than 2.")
             units_per_layer = [2, 5, 1]
-        self.layers = nn.ModuleList([nn.Linear(units_per_layer[i], units_per_layer[i+1], dtype=torch.float32) for i in range(len(units_per_layer) - 1)])
-        self.relu = torch.nn.ReLU()
+        layers = []
+        for i in range(len(units_per_layer) - 1):
+            layers.append(nn.Linear(units_per_layer[i], units_per_layer[i + 1]))
+            if i < len(units_per_layer) - 2:
+                layers.append(nn.ReLU())
+        self.model = nn.Sequential(*layers)
 
     def forward(self, x):
-        y = x
-        for layer in self.layers:
-            y = layer(y)
-            y = self.relu(y)
-        return y
+        return self.model(x)
 
 
 
