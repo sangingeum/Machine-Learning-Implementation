@@ -2,9 +2,39 @@ import torch
 import multiprocessing
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.model_selection import train_test_split
+from torch import nn
 
 
-def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, device, batch_size, loss_function, optimizer, print_interval):
+def calculate_test_loss(model, device, loss_function, test_data_loader):
+    model.eval()
+    with torch.inference_mode():
+        average_test_loss = 0
+        for i, test_data in enumerate(test_data_loader):
+            test_X, test_y = test_data
+            test_X = test_X.to(device)
+            test_y = test_y.to(device)
+            test_y_prediction = model(test_X)
+            test_loss = loss_function(test_y_prediction, test_y)
+            average_test_loss += test_loss
+        average_test_loss /= len(test_data_loader.dataset)
+    return average_test_loss
+
+
+def calculate_binary_accuracy(model, X, y):
+    model.eval()
+    with torch.inference_mode():
+        y_pred = torch.round(nn.Sigmoid()(model(X)))
+    return accuracy(y_pred, y)
+
+def print_learning_progress(epoch, train_loss, test_loss, accuracy=None):
+    progress_string = "\nepoch: {}"\
+                      "\ntrain loss: {}"\
+                      "\ntest loss: {}".format(epoch, train_loss, test_loss)
+    if accuracy is not None:
+        progress_string += "\naccuracy: {}".format(accuracy)
+    print(progress_string)
+
+def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, device, batch_size, loss_function, optimizer, print_interval, accuracy_function=None):
     # split data
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_ratio, random_state=42, shuffle=True)
     # create data loader
@@ -32,21 +62,13 @@ def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, devi
         if print_interval == 0:
             continue
         if epoch % print_interval == 0:
-            model.eval()
-            with torch.inference_mode():
-                average_test_loss = 0
-                for i, test_data in enumerate(test_data_loader):
-                    test_X, test_y = test_data
-                    test_X = test_X.to(device)
-                    test_y = test_y.to(device)
-                    test_y_prediction = model(test_X)
-                    test_loss = loss_function(test_y_prediction, test_y)
-                    average_test_loss += test_loss
-                average_test_loss /= len(test_data_loader.dataset)
-                average_train_loss /= len(train_data_loader.dataset)
-                print("\nepoch: {}"
-                      "\ntrain loss: {}"
-                      "\ntest loss: {}".format(epoch, average_train_loss, average_test_loss))
+            average_train_loss / len(train_data_loader.dataset)
+            average_test_loss = calculate_test_loss(model, device, loss_function, test_data_loader)
+            if accuracy_function is None:
+                print_learning_progress(epoch, average_train_loss, average_test_loss)
+            else:
+                accuracy = accuracy_function(model, X_test.to(device), y_test.to(device))
+                print_learning_progress(epoch, average_train_loss, average_test_loss, accuracy)
 
 
 
