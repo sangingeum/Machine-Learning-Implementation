@@ -59,10 +59,10 @@ def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, devi
             loss.backward()
             optimizer.step()
 
-        if print_interval == 0:
+        if print_interval <= 0:
             continue
         if epoch % print_interval == 0:
-            average_train_loss / len(train_data_loader.dataset)
+            average_train_loss /= len(train_data_loader.dataset)
             average_test_loss = calculate_test_loss(model, device, loss_function, test_data_loader)
             if accuracy_function is None:
                 print_learning_progress(epoch, average_train_loss, average_test_loss)
@@ -74,7 +74,7 @@ def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, devi
 
 def accuracy(y_pred, y_true):
     if y_pred.shape != y_true.shape:
-        print("accuracy function shape mismatch!!!")
+        raise Exception("accuracy function shape mismatch!!!")
     return 100 * (y_pred == y_true).sum() / len(y_pred)
 
 def get_device_name_agnostic():
