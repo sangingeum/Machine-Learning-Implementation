@@ -50,6 +50,10 @@ def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, devi
 
 
 
+def accuracy(y_pred, y_true):
+    if y_pred.shape != y_true.shape:
+        print("accuracy function shape mismatch!!!")
+    return 100 * (y_pred == y_true).sum() / len(y_pred)
 
 def get_device_name_agnostic():
     return "cuda" if torch.cuda.is_available() else "cpu"
