@@ -19,15 +19,14 @@ def calculate_test_loss(model, device, loss_function, test_data_loader):
         average_test_loss /= len(test_data_loader.dataset)
     return average_test_loss
 
-def calculate_multi_class_accuracy(model, X, y):
+
+def round_and_calculate_accuracy(model, X, y):
     model.eval()
     with torch.inference_mode():
         y_pred = torch.round(model(X))
-        acc = 100 * (1 - ((y_pred != y).sum() / len(y)))
+    return accuracy(y_pred, y)
 
-    return acc
-
-def calculate_binary_accuracy(model, X, y):
+def sigmoid_round_and_calculate_accuracy(model, X, y):
     model.eval()
     with torch.inference_mode():
         y_pred = torch.round(nn.Sigmoid()(model(X)))
@@ -79,8 +78,8 @@ def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, devi
 
 def accuracy(y_pred, y_true):
     if y_pred.shape != y_true.shape:
-        raise Exception("accuracy function shape mismatch!!!")
-    return 100 * (y_pred == y_true).sum() / len(y_pred)
+        raise Exception(f"Shape mismatch: y_pred shape is {y_pred.shape} but y_true shape is {y_true.shape}")
+    return 100 * torch.sum(torch.all(torch.eq(y_pred, y_true), dim=1)) / y_pred.shape[0]
 
 def get_device_name_agnostic():
     return "cuda" if torch.cuda.is_available() else "cpu"
