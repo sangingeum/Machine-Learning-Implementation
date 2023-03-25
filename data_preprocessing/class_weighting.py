@@ -18,3 +18,11 @@ def get_weighted_sampler(labels):
     return sampler
 
 
+"""
+    Example:
+    train_sampler = get_weighted_sampler(y_train)
+    train_data_loader = DataLoader(train_data_set, batch_size=batch_size, sampler=train_sampler)
+
+
+"""
+
