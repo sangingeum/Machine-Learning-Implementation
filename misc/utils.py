@@ -3,6 +3,7 @@ import torch
 import multiprocessing
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.model_selection import train_test_split
+from data_preprocessing.class_weighting import *
 from torch import nn
 import numpy as np
 
@@ -47,14 +48,21 @@ def print_learning_progress(epoch, train_loss, test_loss, accuracy=None):
         progress_string += "\naccuracy: {}".format(accuracy)
     print(progress_string)
 
-def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, device, batch_size, loss_function, optimizer, print_interval, accuracy_function=None):
+def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, device, batch_size, loss_function, optimizer,
+               print_interval, weighted_sample=False, accuracy_function=None):
     # split data
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_ratio, random_state=42, shuffle=True)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_ratio, shuffle=True)
     # create data loader
     train_data_set = TensorDataset(X_train, y_train)
     test_data_set = TensorDataset(X_test, y_test)
-    train_data_loader = DataLoader(train_data_set, batch_size=batch_size, shuffle=True)
-    test_data_loader = DataLoader(test_data_set, batch_size=batch_size, shuffle=True)
+
+    if weighted_sample:
+        train_sampler = get_weighted_sampler(y_train)
+        train_data_loader = DataLoader(train_data_set, batch_size=batch_size, sampler=train_sampler)
+        test_data_loader = DataLoader(test_data_set, batch_size=batch_size, shuffle=True)
+    else:
+        train_data_loader = DataLoader(train_data_set, batch_size=batch_size, shuffle=True)
+        test_data_loader = DataLoader(test_data_set, batch_size=batch_size, shuffle=True)
 
     for epoch in range(epochs):
         average_train_loss = 0
