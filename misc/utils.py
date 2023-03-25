@@ -82,13 +82,12 @@ def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, devi
                 accuracy = accuracy_function(model, X_test.to(device), y_test.to(device))
                 print_learning_progress(epoch, average_train_loss, average_test_loss, accuracy)
 
-def print_class_distribution_one_hot(y: numpy.array):
-    class_counts = np.sum(y, axis=0)
-    print(class_counts)
-    return class_counts
-
-def print_class_distribution(y: numpy.array):
-    unique, counts = np.unique(y, return_counts=True)
+def print_class_distribution(y: numpy.array, is_one_hot=False):
+    if is_one_hot:
+        counts = np.sum(y, axis=0)
+        unique = list(range(len(y[0])))
+    else:
+        unique, counts = np.unique(y, return_counts=True)
     class_distribution = dict(zip(unique, counts))
     print(class_distribution)
     return class_distribution
