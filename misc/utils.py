@@ -52,6 +52,7 @@ def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, devi
                print_interval, weighted_sample=False, accuracy_function=None):
     # split data
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_ratio, shuffle=True)
+
     # create data loader
     train_data_set = TensorDataset(X_train, y_train)
     test_data_set = TensorDataset(X_test, y_test)
@@ -70,6 +71,8 @@ def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, devi
             X, y = train_data
             X = X.to(device)
             y = y.to(device)
+
+
 
             model.train()
             y_prediction = model(X)
@@ -106,3 +109,12 @@ def get_device_name_agnostic():
 def get_cpu_count():
     return multiprocessing.cpu_count()
 
+def calculate_height_width_after_conv2d(height, width, kernel_size, stride=1, padding=0, dilation=1):
+    out_height = np.floor((height + 2 * padding - dilation * (kernel_size - 1) - 1) / stride + 1)
+    out_width = np.floor((width + 2 * padding - dilation * (kernel_size - 1) - 1) / stride + 1)
+    return int(out_height), int(out_width)
+
+def calculate_height_width_after_max_pool_2d(height, width, kernel_size, stride=1, padding=0, dilation=1):
+    out_height = np.floor((height + 2 * padding - dilation * (kernel_size - 1) - 1) / stride + 1)
+    out_width = np.floor((width + 2 * padding - dilation * (kernel_size - 1) - 1) / stride + 1)
+    return int(out_height), int(out_width)
