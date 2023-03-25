@@ -3,7 +3,7 @@ import multiprocessing
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.model_selection import train_test_split
 from torch import nn
-
+import numpy as np
 
 def calculate_test_loss(model, device, loss_function, test_data_loader):
     model.eval()
@@ -20,6 +20,12 @@ def calculate_test_loss(model, device, loss_function, test_data_loader):
     return average_test_loss
 
 
+def accuracy(y_pred, y_true):
+    if y_pred.shape != y_true.shape:
+        raise Exception(f"Shape mismatch: y_pred shape is {y_pred.shape} but y_true shape is {y_true.shape}")
+    return 100 * torch.sum(torch.all(torch.eq(y_pred, y_true), dim=1)) / y_pred.shape[0]
+
+
 def round_and_calculate_accuracy(model, X, y):
     model.eval()
     with torch.inference_mode():
@@ -31,6 +37,7 @@ def sigmoid_round_and_calculate_accuracy(model, X, y):
     with torch.inference_mode():
         y_pred = torch.round(nn.Sigmoid()(model(X)))
     return accuracy(y_pred, y)
+
 
 def print_learning_progress(epoch, train_loss, test_loss, accuracy=None):
     progress_string = "\nepoch: {}"\
@@ -76,10 +83,12 @@ def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, devi
                 accuracy = accuracy_function(model, X_test.to(device), y_test.to(device))
                 print_learning_progress(epoch, average_train_loss, average_test_loss, accuracy)
 
-def accuracy(y_pred, y_true):
-    if y_pred.shape != y_true.shape:
-        raise Exception(f"Shape mismatch: y_pred shape is {y_pred.shape} but y_true shape is {y_true.shape}")
-    return 100 * torch.sum(torch.all(torch.eq(y_pred, y_true), dim=1)) / y_pred.shape[0]
+
+
+def print_class_distribution(y):
+    unique, counts = np.unique(y, return_counts=True)
+    class_distribution = dict(zip(unique, counts))
+    print(class_distribution)
 
 def get_device_name_agnostic():
     return "cuda" if torch.cuda.is_available() else "cpu"
