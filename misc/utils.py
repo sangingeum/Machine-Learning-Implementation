@@ -10,7 +10,7 @@ def calculate_test_loss(model, device, loss_function, test_data_loader):
     model.eval()
     with torch.inference_mode():
         average_test_loss = 0
-        for i, test_data in enumerate(test_data_loader):
+        for test_data in test_data_loader:
             test_X, test_y = test_data
             test_X = test_X.to(device)
             test_y = test_y.to(device)
@@ -20,8 +20,7 @@ def calculate_test_loss(model, device, loss_function, test_data_loader):
         average_test_loss /= len(test_data_loader.dataset)
     return average_test_loss
 
-
-def accuracy(y_pred, y_true):
+def calculate_accuracy(y_pred, y_true):
     if y_pred.shape != y_true.shape:
         raise Exception(f"Shape mismatch: y_pred shape is {y_pred.shape} but y_true shape is {y_true.shape}")
     return 100 * torch.sum(torch.all(torch.eq(y_pred, y_true), dim=1)) / y_pred.shape[0]
@@ -31,13 +30,13 @@ def round_and_calculate_accuracy(model, X, y):
     model.eval()
     with torch.inference_mode():
         y_pred = torch.round(model(X))
-    return accuracy(y_pred, y)
+    return calculate_accuracy(y_pred, y)
 
 def sigmoid_round_and_calculate_accuracy(model, X, y):
     model.eval()
     with torch.inference_mode():
         y_pred = torch.round(nn.Sigmoid()(model(X)))
-    return accuracy(y_pred, y)
+    return calculate_accuracy(y_pred, y)
 
 
 def print_learning_progress(epoch, train_loss, test_loss, accuracy=None):
@@ -59,14 +58,13 @@ def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, devi
 
     for epoch in range(epochs):
         average_train_loss = 0
-        for i, train_data in enumerate(train_data_loader):
+        for train_data in train_data_loader:
             X, y = train_data
             X = X.to(device)
             y = y.to(device)
 
             model.train()
             y_prediction = model(X)
-
             loss = loss_function(y_prediction, y)
             average_train_loss += loss
             optimizer.zero_grad()
