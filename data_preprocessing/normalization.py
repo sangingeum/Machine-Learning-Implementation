@@ -4,6 +4,10 @@ from sklearn.preprocessing import MaxAbsScaler
 from sklearn.preprocessing import Normalizer
 from sklearn.preprocessing import RobustScaler
 
+
+from torchvision.transforms import Normalize
+
+
 """
 example:
     scaler = StandardScaler()
