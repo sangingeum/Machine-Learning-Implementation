@@ -4,7 +4,6 @@ from data_preprocessing.normalization import *
 from data_preprocessing.one_hot_encoding import *
 from misc.utils import *
 
-
 def main():
     # device agnostic code
     device = get_device_name_agnostic()
@@ -33,7 +32,7 @@ def main():
     #train loop
     train_loop(X=X, y=y, epochs=epochs, test_ratio=test_ratio, model=model, device=device,
                batch_size=batch_size, loss_function=loss_function, optimizer=optimizer, print_interval=print_interval,
-               accuracy_function=calculate_multi_class_accuracy)
+               weighted_sample=False, accuracy_function=round_and_calculate_accuracy)
 
 if __name__ == "__main__":
     main()
