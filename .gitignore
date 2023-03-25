@@ -11,3 +11,14 @@ supervised/__pycache__/neural_network_multi_class_classification.cpython-39.pyc
 supervised/__pycache__/neural_network_multi_label_classification.cpython-39.pyc
 data_preprocessing/__pycache__/class_weighting.cpython-39.pyc
 test_main.py
+data/FashionMNIST/raw/t10k-images-idx3-ubyte
+data/FashionMNIST/raw/t10k-images-idx3-ubyte.gz
+data/FashionMNIST/raw/t10k-labels-idx1-ubyte
+data/FashionMNIST/raw/t10k-labels-idx1-ubyte.gz
+data/FashionMNIST/raw/train-images-idx3-ubyte
+data/FashionMNIST/raw/train-images-idx3-ubyte.gz
+data/FashionMNIST/raw/train-labels-idx1-ubyte
+data/FashionMNIST/raw/train-labels-idx1-ubyte.gz
+data_preprocessing/class_weighting.py
+data_preprocessing/normalization.py
+supervised/__pycache__/convolutional_neural_network_multi_class_classification.cpython-39.pyc
