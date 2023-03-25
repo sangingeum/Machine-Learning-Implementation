@@ -4,6 +4,7 @@ from torch import nn
 class neural_network_multi_class_classification(nn.Module):
     def __init__(self, units_per_layer=[2, 5, 1]):
         super().__init__()
+        self.dropout_02 = nn.Dropout(p=0.2)
         if len(units_per_layer) < 2:
             raise Exception("Units_per_layer should be longer than 2.")
         layers = []
@@ -11,6 +12,7 @@ class neural_network_multi_class_classification(nn.Module):
             layers.append(nn.Linear(units_per_layer[i], units_per_layer[i + 1]))
             if i < len(units_per_layer) - 2:
                 layers.append(nn.ReLU())
+                layers.append(self.dropout_02)
         layers.append(nn.Softmax(dim=1))
         self.model = nn.Sequential(*layers)
 
