@@ -6,6 +6,8 @@ from sklearn.model_selection import train_test_split
 from data_preprocessing.class_weighting import *
 from torch import nn
 import numpy as np
+import torch.utils.data as data
+
 
 def calculate_test_loss(model, device, loss_function, test_data_loader):
     model.eval()
@@ -26,39 +28,94 @@ def calculate_accuracy(y_pred, y_true):
         raise Exception(f"Shape mismatch: y_pred shape is {y_pred.shape} but y_true shape is {y_true.shape}")
     return 100 * torch.sum(torch.all(torch.eq(y_pred, y_true), dim=1)) / y_pred.shape[0]
 
+def calculate_correct(y_pred, y_true):
+    if y_pred.shape != y_true.shape:
+        raise Exception(f"Shape mismatch: y_pred shape is {y_pred.shape} but y_true shape is {y_true.shape}")
+    return torch.sum(torch.all(torch.eq(y_pred, y_true), dim=1))
 
-def round_and_calculate_accuracy(model, X, y):
+def calculate_accuracy_one_hot(model, test_data_loader, device):
     model.eval()
+    correct = 0
+    total = 0
     with torch.inference_mode():
-        y_pred = torch.round(model(X))
-    return calculate_accuracy(y_pred, y)
+        for data in test_data_loader:
+            X, y = data
+            X = X.to(device)
+            y = y.to(device)
+            outputs = model(X)
+            y_pred = torch.round(outputs)
+            correct += calculate_correct(y_pred, y)
+            total += len(y)
+    return 100 * correct / total
 
-def sigmoid_round_and_calculate_accuracy(model, X, y):
+
+def calculate_accuracy_multi_class(model, test_data_loader, device):
     model.eval()
+    correct = 0
+    total = 0
     with torch.inference_mode():
-        y_pred = torch.round(nn.Sigmoid()(model(X)))
-    return calculate_accuracy(y_pred, y)
+        for data in test_data_loader:
+            X, y = data
+            X = X.to(device)
+            y = y.to(device)
+            outputs = model(X)
+            y_pred = torch.argmax(outputs, dim=1)
+            correct += (y_pred == y).sum().item()
+            total += len(y)
+    return 100*correct/total
+
+def calculate_accuracy_binary_class(model, test_data_loader, device):
+    model.eval()
+    correct = 0
+    total = 0
+    with torch.inference_mode():
+        for data in test_data_loader:
+            X, y = data
+            X = X.to(device)
+            y = y.to(device)
+            outputs = model(X)
+            y_pred = torch.round(outputs)
+            correct += (y_pred == y).sum().item()
+            total += len(y)
+    return 100 * correct / total
+
+
+def calculate_accuracy_binary_class_with_sigmoid(model, test_data_loader, device):
+    model.eval()
+    correct = 0
+    total = 0
+    with torch.inference_mode():
+        for data in test_data_loader:
+            X, y = data
+            X = X.to(device)
+            y = y.to(device)
+            outputs = model(X)
+            y_pred = torch.round(torch.sigmoid(outputs))
+            correct += (y_pred == y).sum().item()
+            total += len(y)
+    return 100 * correct / total
 
 
 def print_learning_progress(epoch, train_loss, test_loss, accuracy=None):
     progress_string = "\nepoch: {}"\
                       "\ntrain loss: {}"\
-                      "\ntest loss: {}".format(epoch, train_loss, test_loss)
+                      "\ntest loss : {}".format(epoch, train_loss, test_loss)
     if accuracy is not None:
         progress_string += "\naccuracy: {}".format(accuracy)
     print(progress_string)
 
-def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, device, batch_size, loss_function, optimizer,
+def train_loop(train_data_set, test_data_set, epochs, model, device, batch_size, loss_function, optimizer,
                print_interval, weighted_sample=False, accuracy_function=None):
-    # split data
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_ratio, shuffle=True)
 
     # create data loader
-    train_data_set = TensorDataset(X_train, y_train)
-    test_data_set = TensorDataset(X_test, y_test)
-
     if weighted_sample:
-        train_sampler = get_weighted_sampler(y_train)
+        if isinstance(train_data_set, data.dataset.TensorDataset):
+            train_sampler = get_weighted_sampler(train_data_set.tensors[1])
+        elif torch.is_tensor(train_data_set.targets):
+            train_sampler = get_weighted_sampler(train_data_set.targets)
+        else:
+            train_sampler = get_weighted_sampler(torch.tensor(train_data_set.targets))
+
         train_data_loader = DataLoader(train_data_set, batch_size=batch_size, sampler=train_sampler)
         test_data_loader = DataLoader(test_data_set, batch_size=batch_size, shuffle=True)
     else:
@@ -72,10 +129,9 @@ def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, devi
             X = X.to(device)
             y = y.to(device)
 
-
-
             model.train()
             y_prediction = model(X)
+
             loss = loss_function(y_prediction, y)
             average_train_loss += loss
             optimizer.zero_grad()
@@ -90,7 +146,7 @@ def train_loop(X: torch.tensor, y: torch.tensor, epochs, test_ratio, model, devi
             if accuracy_function is None:
                 print_learning_progress(epoch, average_train_loss, average_test_loss)
             else:
-                accuracy = accuracy_function(model, X_test.to(device), y_test.to(device))
+                accuracy = accuracy_function(model, test_data_loader, device)
                 print_learning_progress(epoch, average_train_loss, average_test_loss, accuracy)
 
 def print_class_distribution(y: numpy.array, is_one_hot=False):
