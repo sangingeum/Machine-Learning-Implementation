@@ -27,13 +27,12 @@ class convolutional_neural_network_multi_class_classification(nn.Module):
                                     stride=conv_2d_stride, bias=True))
             height, width = calculate_height_width_after_conv2d(height, width, kernel_size=conv_2d_kernel_size,
                                                                 stride=conv_2d_stride, padding=conv_2d_padding)
+            layers.append(nn.Dropout(p=0.2))
             layers.append(nn.BatchNorm2d(channels[i + 1]))
             layers.append(nn.ReLU())
             layers.append(nn.MaxPool2d(kernel_size=max_pool_2d_kernel_size, stride=max_pool_2d_stride))
             height, width = calculate_height_width_after_max_pool_2d(height, width, kernel_size=max_pool_2d_kernel_size,
                                                                      stride=max_pool_2d_stride)
-
-
 
         # Flatten
         layers.append(nn.Flatten())
