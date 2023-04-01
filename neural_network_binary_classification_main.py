@@ -23,10 +23,18 @@ def main():
     print_interval = 100
     batch_size = 128
     test_ratio = 0.2
+
+    # split data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_ratio, shuffle=True)
+
+    # make data set
+    train_data_set = TensorDataset(X_train, y_train)
+    test_data_set = TensorDataset(X_test, y_test)
+
     #train loop
-    train_loop(X=X, y=y, epochs=epochs, test_ratio=test_ratio, model=model, device=device,
+    train_loop(train_data_set=train_data_set, test_data_set=test_data_set, epochs=epochs, model=model, device=device,
                batch_size=batch_size, loss_function=loss_function, optimizer=optimizer, print_interval=print_interval,
-               accuracy_function=sigmoid_round_and_calculate_accuracy)
+               weighted_sample=False, accuracy_function=calculate_accuracy_binary_class_with_sigmoid)
 
 if __name__ == "__main__":
     main()

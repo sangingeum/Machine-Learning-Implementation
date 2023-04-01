@@ -15,6 +15,7 @@ def main():
     # convert to torch.tensor
     X = torch.from_numpy(X).type(torch.float32)
     y = torch.from_numpy(y).type(torch.float32)
+
     # model, hyper parameters
     model = neural_network_regression(units_per_layer=[10, 16, 32, 16, 1]).to(device)
     loss_function = torch.nn.MSELoss()
@@ -23,8 +24,16 @@ def main():
     print_interval = 100
     batch_size = 256
     test_ratio = 0.2
+
+    # split data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_ratio, shuffle=True)
+
+    # make data set
+    train_data_set = TensorDataset(X_train, y_train)
+    test_data_set = TensorDataset(X_test, y_test)
+
     #train loop
-    train_loop(X=X, y=y, epochs=epochs, test_ratio=test_ratio, model=model, device=device,
+    train_loop(train_data_set=train_data_set, test_data_set=test_data_set, epochs=epochs, model=model, device=device,
                batch_size=batch_size, loss_function=loss_function, optimizer=optimizer, print_interval=print_interval)
 
 

@@ -3,9 +3,13 @@ from torch.utils.data import WeightedRandomSampler
 
 
 def get_weighted_sampler(labels):
+
     # Check input tensor shape
-    if len(labels.shape) != 2:
-        raise ValueError("Input tensor must be 2D")
+    if len(labels.shape) == 1:
+        labels = torch.reshape(labels, (-1, 1))
+    if len(labels.shape) >= 3:
+        raise ValueError("Input tensor must be lower than 3D, {}-D given".format(len(labels.shape)))
+
     # Compute class frequencies
     uniques, counts = torch.unique(labels, dim=0, return_counts=True)
     class_weights = labels.shape[0] / counts
@@ -15,6 +19,7 @@ def get_weighted_sampler(labels):
         sample_weights[torch.all(labels == unique, dim=1)] = class_weights[i]
     # Create weighted sampler
     sampler = WeightedRandomSampler(sample_weights, labels.shape[0])
+
     return sampler
 
 
