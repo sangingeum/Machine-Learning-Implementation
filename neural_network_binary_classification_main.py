@@ -1,4 +1,4 @@
-from supervised.neural_network_binary_classification import *
+from tabular_classification.neural_network_binary_classification import *
 from sklearn.datasets import load_breast_cancer
 from data_preprocessing.normalization import *
 from misc.utils import *

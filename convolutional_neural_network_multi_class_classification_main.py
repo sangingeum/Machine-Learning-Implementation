@@ -1,4 +1,4 @@
-from supervised.convolutional_neural_network_multi_class_classification import *
+from image_classification.convolutional_neural_network_multi_class_classification import *
 from torchvision.datasets import CIFAR10
 from torchvision import transforms
 from misc.utils import *
