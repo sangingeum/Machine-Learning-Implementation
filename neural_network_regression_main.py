@@ -1,4 +1,4 @@
-from supervised.neural_network_regression import *
+from tabular_regression.neural_network_regression import *
 from sklearn.datasets import load_diabetes
 from data_preprocessing.normalization import *
 from misc.utils import *

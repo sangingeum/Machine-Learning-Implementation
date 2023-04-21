@@ -1,4 +1,4 @@
-from supervised.neural_network_multi_label_classification import *
+from tabular_classification.neural_network_multi_label_classification import *
 from sklearn.datasets import make_multilabel_classification
 from data_preprocessing.normalization import *
 from misc.utils import *
