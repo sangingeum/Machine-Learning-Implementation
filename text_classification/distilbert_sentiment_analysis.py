@@ -1,7 +1,7 @@
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from collections import deque
-class sentiment_analysis:
+class distilbert_sentiment_analysis:
     def __init__(self):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.checkpoint = "distilbert-base-uncased-finetuned-sst-2-english"
@@ -16,7 +16,7 @@ class sentiment_analysis:
         :param round_result: whether to round the result
         :return: class prob or one-hot label depending on 'round_result'
         """
-
+        text_len = len(texts)
         results = deque()
         # Loop through the texts in batches
         for i in range(0, len(texts), batch_size):
@@ -32,7 +32,7 @@ class sentiment_analysis:
             # Add the class probabilities to the results list
             results.append(class_prob)
             if verbose:
-                print("Processed {} texts".format(i + batch_size))
+                print("Processed {} texts".format(min(i + batch_size, text_len)))
         # Concatenate the class probabilities for all batches
         class_prob = torch.cat(list(results), dim=0)
 
