@@ -15,7 +15,7 @@ class recurrent_neural_network_sentiment_analysis(nn.Module):
         self.tokenizer = AutoTokenizer.from_pretrained(self.checkpoint)
         self.model = AutoModel.from_pretrained(self.checkpoint).to(self.device)
         self.rnn = nn.RNN(input_size=input_size, hidden_size=hidden_size, num_layers=num_layers, nonlinearity='tanh',
-                          batch_first=True, dropout=0.2, bidirectional=bidirectional).to(self.device)
+                          batch_first=True, dropout=0, bidirectional=bidirectional).to(self.device)
         if bidirectional:
             self.linear = nn.Linear(in_features=self.hidden_size*2, out_features=1).to(self.device)
         else:
