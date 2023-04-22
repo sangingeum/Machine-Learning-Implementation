@@ -1,4 +1,4 @@
-from text_classification.sentiment_analysis import *
+from text_classification.distilbert_sentiment_analysis import *
 from torchtext.datasets import IMDB
 import torch
 
@@ -11,7 +11,7 @@ if __name__ == "__main__":
     #texts = texts[:1000]
     # make label 0 or 1
     labels = torch.tensor(labels) - 1
-    analyzer = sentiment_analysis()
+    analyzer = distilbert_sentiment_analysis()
     # predict the sentiment of given texts.
     # If GPU mem is not enough, adjust 'batch_size'.
     predictions = torch.argmax(analyzer(list(texts), batch_size=128, round_result=True, verbose=True), dim=1).cpu()
