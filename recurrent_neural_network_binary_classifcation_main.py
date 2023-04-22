@@ -1,7 +1,7 @@
 from torchtext.datasets import IMDB
 from torch.utils.data import Dataset
 import random
-from text_classification.recurrent_neural_network_sentiment_analysis import *
+from text_classification.recurrent_neural_network_binary_classification import *
 from misc.utils import *
 
 class TextDataset(Dataset):
@@ -40,7 +40,7 @@ def collate(samples):
 
 if __name__ == "__main__":
     device = get_device_name_agnostic()
-    model = recurrent_neural_network_sentiment_analysis(768, 512, bidirectional=False).to(device)
+    model = recurrent_neural_network_binary_classification(768, 512, bidirectional=False).to(device)
 
     train_iter = IMDB(root='./data', split='train')
     test_iter = IMDB(root='./data', split='test')

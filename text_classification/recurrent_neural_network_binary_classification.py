@@ -3,7 +3,7 @@ from torch import nn
 from transformers import AutoTokenizer, AutoModel
 from collections import deque
 
-class recurrent_neural_network_sentiment_analysis(nn.Module):
+class recurrent_neural_network_binary_classification(nn.Module):
     def __init__(self, input_size, hidden_size, num_layers=1, bidirectional=False):
         super().__init__()
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
