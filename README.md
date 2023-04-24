@@ -1,2 +1,11 @@
-# Machine_Learning_Encyclopedia
-An encyclopedia on ML implementations for me to look up
+# Machine_Learning_Library
+
+## Description
+
+Library on ML implementations for me to look up
+
+## Features
+
+## Installation
+
+## Usage
