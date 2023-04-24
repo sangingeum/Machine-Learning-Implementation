@@ -4,7 +4,7 @@ from copy import deepcopy
 
 class reinforcement_deep_q_network:
     """
-    n-step DQN with a replay buffer and a target network
+    n-step DQN with a replay buffer
     """
     def __init__(self, units_per_layer=[4, 64, 128, 64, 2]):
         # model creation
