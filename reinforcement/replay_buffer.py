@@ -69,10 +69,10 @@ class replay_buffer:
         if device is None:
             device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         sampled_indices = np.random.choice(len(self.states), batch_size, replace=True).astype(np.int)
-        sampled_states = torch.tensor([self.states[i] for i in sampled_indices]).to(device)
-        sampled_actions = torch.tensor([self.actions[i] for i in sampled_indices]).to(device)
-        sampled_rewards = torch.tensor([self.rewards[i] for i in sampled_indices]).to(device)
-        sampled_next_states = torch.tensor([self.next_states[i] for i in sampled_indices]).to(device)
-        sampled_dones = torch.tensor([self.dones[i] for i in sampled_indices]).to(device)
+        sampled_states = torch.tensor(np.array([self.states[i] for i in sampled_indices])).to(device)
+        sampled_actions = torch.tensor(np.array([self.actions[i] for i in sampled_indices])).to(device)
+        sampled_rewards = torch.tensor(np.array([self.rewards[i] for i in sampled_indices])).to(device)
+        sampled_next_states = torch.tensor(np.array([self.next_states[i] for i in sampled_indices])).to(device)
+        sampled_dones = torch.tensor(np.array([self.dones[i] for i in sampled_indices])).to(device)
 
         return sampled_states, sampled_actions, sampled_rewards, sampled_next_states, sampled_dones
