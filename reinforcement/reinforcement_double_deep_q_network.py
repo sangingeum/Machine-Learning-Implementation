@@ -8,16 +8,7 @@ class reinforcement_double_deep_q_network:
     """
     def __init__(self, units_per_layer=[4, 64, 128, 64, 2]):
         # model creation
-        layers = list()
-        layer_len = len(units_per_layer)
-        if layer_len < 2:
-            raise AssertionError
-        for i in range(layer_len - 1):
-            layers.append(nn.Linear(units_per_layer[i], units_per_layer[i + 1]))
-            if i < layer_len - 2:
-                layers.append(nn.ReLU())
-        self.network = nn.Sequential(*layers)
-
+        self.network = self._build_model(units_per_layer)
         # hyper parameter setting
         self.state_size = units_per_layer[0]
         self.action_size = units_per_layer[-1]
@@ -41,6 +32,17 @@ class reinforcement_double_deep_q_network:
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.target_network = deepcopy(self.network).to(self.device)
         self.network = self.network.to(self.device)
+
+    def _build_model(self, units_per_layer):
+        layers = list()
+        layer_len = len(units_per_layer)
+        if layer_len < 2:
+            raise AssertionError
+        for i in range(layer_len - 1):
+            layers.append(nn.Linear(units_per_layer[i], units_per_layer[i + 1]))
+            if i < layer_len - 2:
+                layers.append(nn.ReLU())
+        return nn.Sequential(*layers)
 
     def epsilon_greedy_policy(self, state):
         if np.random.uniform(0, 1) < self.epsilon:
