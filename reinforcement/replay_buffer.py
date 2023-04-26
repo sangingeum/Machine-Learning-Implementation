@@ -11,7 +11,7 @@ class replay_buffer:
         """
         :param buffer_size: buffer_size, positive integer
         :param n_step: n_step, positive integer
-        :param gamma: discount factor, float, used if n>1
+        :param gamma: discount factor, float, used if n_step>1
         """
         self.buffer_size = buffer_size
         self.n_step = n_step
