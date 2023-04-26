@@ -6,7 +6,7 @@ if __name__ == "__main__":
     total_steps = 50000
     cur_steps = 0
     max_episodes = 10000
-    model = reinforcement_double_deep_q_network(units_per_layer=[4, 128, 64, 32, 2])
+    model = reinforcement_double_deep_q_network(units_per_layer=[4, 128, 64, 32, 2], use_PER=True)
     for episode in range(max_episodes):
         state = env.reset()[0]
         reward_sum = 0
