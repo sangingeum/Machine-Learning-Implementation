@@ -1,0 +1,7 @@
+numpy
+gymnasium
+sklearn
+torch
+torchvision
+matplotlib
+transformers
