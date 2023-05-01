@@ -16,14 +16,13 @@ This is a library of machine learning implementations for quick reference.
     * #### Binary Classification
       * ##### Sentiment Analysis
 * ### Reinforcement Learning
-    * #### Non-Neural Network RL
+    * #### FrozenLake
       * ##### Value Iteration
       * ##### Policy Iteration
       * ##### Monte Carlo
-    * #### Neural Network RL
-      * ##### Deep Q Network
-      * ##### Double Deep Q Network
-      * ##### Prioritized Replay Buffer
+    * #### CartPole
+      * ##### DQN (Double DQN, Dueling DQN, PER, n-step reward)
+    
 ## Installation
 To install the necessary packages, run the following command in your terminal:
 

@@ -8,7 +8,7 @@ class reinforcement_deep_q_network_all_in_one:
     """
     All in one DQN
     Current features:
-    Double DQN, Dualing DQN, PER, n-step reward
+    Double DQN, Dueling DQN, PER, n-step reward
     """
     def __init__(self, state_size, action_size, use_double_DQN=False, use_PER=False, use_dueling_DQN=False,
                  hidden_layer_units=[256, 128, 64], value_layer_units=[128, 64], advantage_layer_units=[128, 64],
