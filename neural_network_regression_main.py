@@ -34,7 +34,8 @@ def main():
 
     #train loop
     train_loop(train_data_set=train_data_set, test_data_set=test_data_set, epochs=epochs, model=model, device=device,
-               batch_size=batch_size, loss_function=loss_function, optimizer=optimizer, print_interval=print_interval)
+               batch_size=batch_size, loss_function=loss_function, optimizer=optimizer, print_interval=print_interval,
+               drop_last=False)
 
 
 if __name__ == "__main__":
