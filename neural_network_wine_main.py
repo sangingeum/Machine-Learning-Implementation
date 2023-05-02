@@ -1,9 +1,6 @@
-import torch
-
 from tabular_classification.neural_network_multi_class_classification import *
 from sklearn.datasets import load_wine
 from data_preprocessing.normalization import *
-from data_preprocessing.one_hot_encoding import *
 from misc.utils import *
 
 def main():
