@@ -1,7 +1,9 @@
 numpy
 gymnasium
-sklearn
+gymnasium[box2d]
+scikit-learn
 torch
 torchvision
+torchtext
 matplotlib
 transformers

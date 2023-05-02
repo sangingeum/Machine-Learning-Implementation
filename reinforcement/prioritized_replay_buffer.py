@@ -85,7 +85,7 @@ class prioritized_replay_buffer:
         sample_prob = np.power(np.array(self.TD_errors) + self.small_positive_value, self.alpha)
         sample_prob /= np.sum(sample_prob)
 
-        sampled_indices = np.random.choice(len(self.states), batch_size, replace=True, p=sample_prob).astype(np.int)
+        sampled_indices = np.random.choice(len(self.states), batch_size, replace=True, p=sample_prob).astype(int)
         sampled_TD_errors = np.array([self.TD_errors[i] for i in sampled_indices])
 
         sampled_p = np.power(sampled_TD_errors + self.small_positive_value, self.alpha)

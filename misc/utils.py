@@ -106,18 +106,12 @@ def calculate_accuracy_binary_class_with_sigmoid(model, test_data_loader, device
     return 100 * correct / total
 
 
-def print_learning_progress(epoch, train_loss, test_loss, accuracy=None):
-    progress_string = "\nepoch: {}"\
-                      "\ntrain loss: {}"\
-                      "\ntest loss : {}".format(epoch, train_loss, test_loss)
-    if accuracy is not None:
-        progress_string += "\naccuracy: {}".format(accuracy)
-    print(progress_string)
+
 
 
 def train_loop(train_data_set, test_data_set, epochs, model, device, batch_size, loss_function, optimizer,
                print_interval, weighted_sample=False, accuracy_function=None, X_on_the_fly_function=None,
-               collate_fn=torch.utils.data.default_collate, test_first=False):
+               collate_fn=torch.utils.data.default_collate, test_first=False, drop_last=False):
 
     # create data loader
     if weighted_sample:
@@ -128,26 +122,24 @@ def train_loop(train_data_set, test_data_set, epochs, model, device, batch_size,
         else:
             train_sampler = get_weighted_sampler(torch.tensor(train_data_set.targets))
 
-        train_data_loader = DataLoader(train_data_set, batch_size=batch_size, sampler=train_sampler, collate_fn=collate_fn, drop_last=True)
-        test_data_loader = DataLoader(test_data_set, batch_size=batch_size, shuffle=True, collate_fn=collate_fn, drop_last=True)
+        train_data_loader = DataLoader(train_data_set, batch_size=batch_size, sampler=train_sampler, collate_fn=collate_fn, drop_last=drop_last)
+        test_data_loader = DataLoader(test_data_set, batch_size=batch_size, shuffle=True, collate_fn=collate_fn, drop_last=drop_last)
     else:
-        train_data_loader = DataLoader(train_data_set, batch_size=batch_size, shuffle=True, collate_fn=collate_fn, drop_last=True)
-        test_data_loader = DataLoader(test_data_set, batch_size=batch_size, shuffle=True, collate_fn=collate_fn, drop_last=True)
+        train_data_loader = DataLoader(train_data_set, batch_size=batch_size, shuffle=True, collate_fn=collate_fn, drop_last=drop_last)
+        test_data_loader = DataLoader(test_data_set, batch_size=batch_size, shuffle=True, collate_fn=collate_fn, drop_last=drop_last)
 
     if test_first:
         print_progress(train_data_loader, test_data_loader, model, device, 0, loss_function, 0, accuracy_function, X_on_the_fly_function)
-
     for epoch in range(1, epochs+1):
         average_train_loss = 0
         for train_data in train_data_loader:
-
+            model.train()
             X, y = train_data
             if X_on_the_fly_function is not None:
                 X = X_on_the_fly_function(X)
             X = X.to(device)
             y = y.to(device)
 
-            model.train()
             y_prediction = model(X)
 
             loss = loss_function(y_prediction, y)
@@ -170,7 +162,13 @@ def print_progress(train_data_loader, test_data_loader, model, device, epoch, lo
         accuracy = accuracy_function(model, test_data_loader, device, X_on_the_fly_function)
         print_learning_progress(epoch, average_train_loss, average_test_loss, accuracy)
 
-
+def print_learning_progress(epoch, train_loss, test_loss, accuracy=None):
+    progress_string = "\nepoch: {}"\
+                      "\ntrain loss: {}"\
+                      "\ntest loss : {}".format(epoch, train_loss, test_loss)
+    if accuracy is not None:
+        progress_string += "\naccuracy: {}".format(accuracy)
+    print(progress_string)
 def print_class_distribution(y: numpy.array, is_one_hot=False):
     if is_one_hot:
         counts = np.sum(y, axis=0)
