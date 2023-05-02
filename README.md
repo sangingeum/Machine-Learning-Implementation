@@ -7,14 +7,21 @@ This is a library of machine learning implementations for quick reference.
 ## Features
 * ### Tabular Classification
     * #### Binary Classification
+      * ##### MLP
+      * ##### Bagging and Voting
     * #### Multi-class Classification
+      * ##### MLP
+      * ##### Bagging and Voting
     * #### Multi-label Classification
+      * ##### MLP
 * ### Tabular Regression
+    * ##### MLP
 * ### Image Classification
     * #### Multi-class Classification
+      * ##### CNN
 * ### Text Classification
-    * #### Binary Classification
-      * ##### Sentiment Analysis
+    * #### Binary Classification 
+      * ##### Pretrained model + RNN
 * ### Reinforcement Learning
     * #### FrozenLake
       * ##### Value Iteration
