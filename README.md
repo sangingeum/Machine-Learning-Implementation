@@ -22,6 +22,8 @@ This is a library of machine learning implementations for quick reference.
       * ##### Monte Carlo
     * #### CartPole
       * ##### DQN (Double DQN, Dueling DQN, PER, n-step reward)
+    * #### LunarLander
+      * ##### DQN (Double DQN, Dueling DQN, PER, n-step reward)
     
 ## Installation
 To install the necessary packages, run the following command in your terminal:
