@@ -22,6 +22,9 @@ This is a library of machine learning implementations for quick reference.
 * ### Text Classification
     * #### Binary Classification 
       * ##### Pretrained model + RNN
+* ### Graph Classification
+    * #### Node Classification 
+      * ##### GCN
 * ### Reinforcement Learning
     * #### FrozenLake
       * ##### Value Iteration
