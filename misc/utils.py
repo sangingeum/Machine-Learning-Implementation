@@ -7,7 +7,7 @@ from data_preprocessing.class_weighting import *
 from torch import nn
 import numpy as np
 import torch.utils.data as data
-
+from sklearn.metrics import accuracy_score
 
 def calculate_test_loss(model, device, loss_function, test_data_loader, X_on_the_fly_function=None):
     model.eval()
@@ -106,9 +106,6 @@ def calculate_accuracy_binary_class_with_sigmoid(model, test_data_loader, device
     return 100 * correct / total
 
 
-
-
-
 def train_loop(train_data_set, test_data_set, epochs, model, device, batch_size, loss_function, optimizer,
                print_interval, weighted_sample=False, accuracy_function=None, X_on_the_fly_function=None,
                collate_fn=torch.utils.data.default_collate, test_first=False, drop_last=False):
@@ -152,6 +149,49 @@ def train_loop(train_data_set, test_data_set, epochs, model, device, batch_size,
             continue
         if epoch % print_interval == 0:
             print_progress(train_data_loader, test_data_loader, model, device, epoch, loss_function, average_train_loss, accuracy_function, X_on_the_fly_function)
+
+
+def train_loop_with_adjacency_matrix(train_data_set, test_data_set, features, labels,
+                                     epochs, model, device, batch_size, loss_function, optimizer,
+                                     print_interval, adjacency_matrix):
+
+    train_data_loader = DataLoader(train_data_set, batch_size=batch_size, shuffle=True, drop_last=False)
+    test_data_loader = DataLoader(test_data_set, batch_size=batch_size, shuffle=True, drop_last=False)
+    # train loop
+    adjacency_matrix = adjacency_matrix.to(device)
+    features = features.to(device)
+    labels = labels.to(device)
+    for epoch in range(1, epochs + 1):
+        average_train_loss = 0
+        for train_data in train_data_loader:
+            model.train()
+            i = train_data
+            y_prediction = model(features, adjacency_matrix)
+            loss = loss_function(y_prediction[i], labels[i])
+            average_train_loss += loss
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+        if print_interval <= 0:
+            continue
+        if epoch % print_interval == 0:
+            average_test_loss = 0
+            correct = 0
+            model.eval()
+            with torch.inference_mode():
+                for test_data in test_data_loader:
+                    i = test_data
+                    y_prediction = model(features, adjacency_matrix)
+                    loss = loss_function(y_prediction[i], labels[i])
+                    correct += accuracy_score(y_true=labels[i].cpu(), y_pred=torch.round(y_prediction[i]).cpu(), normalize=False)
+                    average_test_loss += loss
+
+                average_train_loss /= len(train_data_loader.dataset)
+                average_test_loss /= len(test_data_loader.dataset)
+                print("epoch: {}, train loss:{}, test loss: {}, acc: {}".format(epoch, average_train_loss, average_test_loss,
+                                                                     correct / len(test_data_loader.dataset)))
+
 
 def print_progress(train_data_loader, test_data_loader, model, device, epoch, loss_function, average_train_loss, accuracy_function=None, X_on_the_fly_function=None):
     average_train_loss /= len(train_data_loader.dataset)
