@@ -26,10 +26,9 @@ if __name__ == "__main__":
     epochs = 201
     print_interval = 10
     batch_size = 128
-    test_ratio = 0.8 # use only 20% for training
     # split data
     indexes = torch.randperm(len(features))
-    sep = int(0.15*len(features))
+    sep = int(0.20*len(features)) # use only 20% for training
     train_index = indexes[:sep]
     test_index = indexes[sep:]
     # make data set & data loader
