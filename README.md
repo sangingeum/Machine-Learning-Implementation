@@ -19,6 +19,9 @@ This is a library of machine learning implementations for quick reference.
 * ### Image Classification
     * #### Multi-class Classification
       * ##### CNN
+* ### Image Generation
+    * #### MNIST
+      * ##### WGAN
 * ### Text Classification
     * #### Binary Classification 
       * ##### Pretrained model + RNN
