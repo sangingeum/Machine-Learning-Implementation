@@ -1,6 +1,6 @@
 from torch import nn
 from reinforcement.replay_buffer import *
-from reinforcement.prioritized_replay_buffer import *
+from reinforcement.prioritized_replay_buffer_sum_tree import *
 from reinforcement.q_network import *
 from copy import deepcopy
 
@@ -128,7 +128,7 @@ class reinforcement_deep_q_network_all_in_one:
             if self.use_PER:
                 states, actions, rewards, next_states, dones, indices, weights = self.replay_buffer.sample(self.batch_size, device=self.device)
                 td_errors = self.train_network(states, actions, rewards, next_states, dones, weights)
-                self.replay_buffer.update_TD_errors(indices, td_errors.detach().cpu())
+                self.replay_buffer.update_priorities(indices, td_errors.detach().cpu())
             else:
                 states, actions, rewards, next_states, dones = self.replay_buffer.sample(self.batch_size, device=self.device)
                 self.train_network(states, actions, rewards, next_states, dones)

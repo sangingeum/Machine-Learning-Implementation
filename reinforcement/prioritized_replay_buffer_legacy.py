@@ -36,6 +36,7 @@ class prioritized_replay_buffer:
         self.alpha = 0.8
         self.beta = 0.3
         self.beta_increment = 0.0005
+
     def __len__(self) -> int:
         return len(self.states)
 
@@ -61,6 +62,12 @@ class prioritized_replay_buffer:
                 self.next_states.append(next_state)
                 self.dones.append(done)
                 self.TD_errors.append(self.default_TD_error)
+            if done:
+                self.n_states.clear()
+                self.n_actions.clear()
+                self.n_rewards.clear()
+                self.n_next_states.clear()
+                self.n_dones.clear()
         else:
             self.states.append(state)
             self.actions.append(action)

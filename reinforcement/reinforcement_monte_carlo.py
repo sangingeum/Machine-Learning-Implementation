@@ -5,8 +5,8 @@ from collections import deque
 class reinforcement_monte_carlo():
 
     def __init__(self, env, num_iterations=10000,
-                 epsilon=1.0, min_epsilon=0.05, epsilon_decay_rate=0.9995,
-                 alpha=0.01, gamma=0.99):
+                 epsilon=1.0, min_epsilon=0.01, epsilon_decay_rate=0.9995,
+                 alpha=0.001, gamma=0.99):
         self.env = env
         self.num_iterations = num_iterations
         self.epsilon = epsilon

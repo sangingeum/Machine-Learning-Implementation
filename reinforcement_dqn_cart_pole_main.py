@@ -8,7 +8,7 @@ if __name__ == "__main__":
     max_episodes = 10000
     model = reinforcement_deep_q_network_all_in_one(state_size=4, action_size=2, hidden_layer_units=[128, 64, 32],
                                                     use_PER=True, use_double_DQN=True, use_dueling_DQN=True,
-                                                    n_step=1)
+                                                    n_step=3, buffer_size=50000)
     for episode in range(max_episodes):
         state = env.reset()[0]
         reward_sum = 0
