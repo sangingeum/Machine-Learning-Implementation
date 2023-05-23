@@ -4,8 +4,8 @@ from reinforcement.reinforcement_monte_carlo import *
 def main():
     env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=True)
     model = reinforcement_monte_carlo(env=env, num_iterations=100000,
-                                      epsilon_decay_rate=0.99995, alpha=0.001, gamma=0.999,
-                                      min_epsilon=0.05)
+                                      epsilon_decay_rate=0.05, alpha=0.003, gamma=0.999,
+                                      min_epsilon=0.001)
     model.fit()
     episodes = 100
     return_sum = 0
