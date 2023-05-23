@@ -1,6 +1,6 @@
 from torch import nn
 from reinforcement.replay_buffer import *
-from reinforcement.prioritized_replay_buffer_sum_tree import *
+from reinforcement.prioritized_replay_buffer import *
 from reinforcement.q_network import *
 from copy import deepcopy
 

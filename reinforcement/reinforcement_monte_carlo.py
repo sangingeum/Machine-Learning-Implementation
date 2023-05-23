@@ -15,7 +15,8 @@ class reinforcement_monte_carlo():
         self.alpha = alpha
         self.gamma = gamma
         self.action_size = self.env.action_space.n
-        self.Q = defaultdict(lambda: np.zeros(self.action_size))
+        # optimistic initialization
+        self.Q = defaultdict(lambda: 100*np.ones(self.action_size))
 
     def fit(self, num_iterations=None):
         if num_iterations is None:
