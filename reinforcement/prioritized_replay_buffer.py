@@ -1,11 +1,10 @@
 from collections import deque
 import torch
-import numpy as np
 from reinforcement.sum_tree import *
 
 class prioritized_replay_buffer:
     '''
-    prioritized replay buffer utilizing the sum tree structure
+    prioritized replay buffer based on the sum tree structure
     '''
 
     def __init__(self, buffer_size=100000, n_step=1, gamma=0.85,
