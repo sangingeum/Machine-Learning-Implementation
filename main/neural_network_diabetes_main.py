@@ -15,7 +15,6 @@ def main():
     # convert to torch.tensor
     X = torch.from_numpy(X).type(torch.float32)
     y = torch.from_numpy(y).type(torch.float32)
-
     # model, hyper parameters
     model = neural_network_regression(units_per_layer=[10, 16, 32, 16, 1]).to(device)
     loss_function = torch.nn.MSELoss()
