@@ -6,9 +6,9 @@ if __name__ == "__main__":
     total_steps = 500000
     cur_steps = 0
     max_episodes = 10000
-    model = reinforcement_deep_q_network_all_in_one(state_size=8, action_size=4, use_PER=False, use_double_DQN=True, use_dueling_DQN=True,
+    model = reinforcement_deep_q_network_all_in_one(state_size=8, action_size=4, use_PER=True, use_double_DQN=True, use_dueling_DQN=True,
                                                     hidden_layer_units=[512, 256, 256], value_layer_units=[128, 64, 32], advantage_layer_units=[128, 64, 32],
-                                                    n_step=1, learning_start_buffer_size=100000, buffer_size=200000, epsilon_decay=0.99999, batch_size=512,
+                                                    n_step=5, learning_start_buffer_size=100000, buffer_size=200000, epsilon_decay=0.99999, batch_size=512,
                                                     min_epsilon=0.1, target_update_freq=250)
     for episode in range(max_episodes):
         state = env.reset()[0]

@@ -9,6 +9,8 @@ def main():
     # transformations
     train_transformations = transforms.Compose([
         transforms.RandomHorizontalFlip(),
+        transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1, hue=0.1),
+        transforms.RandomRotation(degrees=15),
         transforms.ToTensor(),
         transforms.Normalize(0.5, 0.5)
     ])
@@ -21,10 +23,10 @@ def main():
     test_data_set = CIFAR10(root="data", train=False, download=True, transform=test_transformations)
 
     # model, hyper parameters
-    model = convolutional_neural_network_multi_class_classification(32, 32, channels=[3, 32, 128],
+    model = convolutional_neural_network_multi_class_classification(32, 32, channels=[3, 32, 64, 128],
                                                                     units_in_hidden_layers=[128, 64, 32, 10]).to(device)
     loss_function = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0003)
 
     epochs = 501
     print_interval = 1
@@ -33,7 +35,7 @@ def main():
     # train loop
     train_loop(train_data_set=train_data_set, test_data_set=test_data_set, epochs=epochs, model=model, device=device,
                batch_size=batch_size, loss_function=loss_function, optimizer=optimizer, print_interval=print_interval,
-               weighted_sample=False, accuracy_function=calculate_accuracy_multi_class)
+               weighted_sample=False, calculate_accuracy=True)
 
 if __name__ == "__main__":
     main()

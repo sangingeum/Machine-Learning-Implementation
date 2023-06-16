@@ -31,7 +31,7 @@ if __name__ == "__main__":
     sep = int(0.20*len(features)) # use only 20% for training
     train_index = indexes[:sep]
     test_index = indexes[sep:]
-    # make data set & data loader
+    # make data set
     train_data_set = IndexDataset(train_index)
     test_data_set = IndexDataset(test_index)
     # train loop
