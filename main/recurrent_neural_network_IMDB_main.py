@@ -64,7 +64,7 @@ if __name__ == "__main__":
     # train loop
     train_loop(train_data_set=train_data_set, test_data_set=test_data_set, epochs=epochs, model=model, device=device,
                batch_size=batch_size, loss_function=loss_function, optimizer=optimizer, print_interval=print_interval,
-               weighted_sample=False, accuracy_function=calculate_accuracy_binary_class, X_on_the_fly_function=model.embed_texts,
+               weighted_sample=False, calculate_accuracy=True, X_on_the_fly_function=model.embed_texts,
                test_first=True, drop_last=True)
 
 
