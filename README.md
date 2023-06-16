@@ -44,10 +44,10 @@ To install the necessary packages, run the following command in your terminal:
     pip3 install -r requirements.txt
 We recommend installing the CUDA-enabled version of PyTorch, which can be found [here](https://pytorch.org/get-started/locally/)
 ## Usage
-To use a specific implementation, run the corresponding filename_main.py file in your terminal using Python3, like this:
+To use a specific implementation, navigate to the main folder and run the corresponding [filename]_main.py file like this:
     
     python3 [filename]_main.py
 ## Example
-To run the neural network regression example, run the following command:
+To run the GCN example on the Cora dataset, run the following command:
 
-    python3 neural_network_regression_main.py
+    python3 graph_convolutional_network_cora_main.py
