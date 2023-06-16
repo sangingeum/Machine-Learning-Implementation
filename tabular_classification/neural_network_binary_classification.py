@@ -12,7 +12,7 @@ class neural_network_binary_classification(nn.Module):
             if i < len(units_per_layer) - 2:
                 layers.append(nn.ReLU())
                 layers.append(nn.Dropout(p=0.2))
-
+        layers.append(nn.Sigmoid())
         self.model = nn.Sequential(*layers)
 
     def forward(self, x):
