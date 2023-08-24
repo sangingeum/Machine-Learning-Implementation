@@ -4,39 +4,39 @@
 
 This is a library of machine learning implementations for quick reference.
 
-## Features
-* ### Tabular Classification
-    * #### Binary Classification
-      * ##### MLP
-      * ##### Bagging and Voting
-    * #### Multi-class Classification
-      * ##### MLP
-      * ##### Bagging and Voting
-    * #### Multi-label Classification
-      * ##### MLP
-* ### Tabular Regression
-    * ##### MLP
-* ### Image Classification
-    * #### Multi-class Classification
-      * ##### CNN
-* ### Image Generation
-    * #### MNIST
-      * ##### WGAN
-* ### Text Classification
-    * #### Binary Classification 
-      * ##### Pretrained model + RNN
-* ### Graph Classification
-    * #### Node Classification 
-      * ##### GCN
-* ### Reinforcement Learning
-    * #### FrozenLake
-      * ##### Value Iteration
-      * ##### Policy Iteration
-      * ##### Monte Carlo
-    * #### CartPole
-      * ##### DQN (Double DQN, Dueling DQN, PER, n-step reward)
-    * #### LunarLander
-      * ##### DQN (Double DQN, Dueling DQN, PER, n-step reward)
+## Implementations
+### - Tabular Classification -
+#### Binary Classification
+* MLP
+* Bagging and Voting
+#### Multi-class Classification
+* MLP 
+* Bagging and Voting
+#### Multi-label Classification
+* MLP
+### - Tabular Regression -
+* MLP
+### - Image Classification -
+#### Multi-class Classification
+* CNN
+### - Image Generation -
+#### MNIST
+* WGAN
+### - Text Classification -
+#### Binary Classification 
+* Pretrained model + RNN
+### - Graph Classification -
+#### Node Classification 
+* GCN
+### - Reinforcement Learning -
+#### FrozenLake
+* Value Iteration
+* Policy Iteration
+* Monte Carlo
+#### CartPole
+* DQN (Double DQN, Dueling DQN, PER, n-step reward)
+#### LunarLander
+* DQN (Double DQN, Dueling DQN, PER, n-step reward)
     
 ## Installation
 To install the necessary packages, run the following command in your terminal:
